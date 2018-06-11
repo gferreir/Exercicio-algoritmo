@@ -4,6 +4,10 @@
 #include <conio.h>
 #include <string.h>
 
+/* Programa destinado a ser executado em plataforma Windows
+ * Devido a biblioteca <conio.h>
+*/
+
 /*Estrutura agenda */
 typedef struct agenda
 {
