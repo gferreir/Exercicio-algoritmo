@@ -1,81 +1,66 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
 
 typedef struct{
 	int a;
 	int b;
 }XPTO;
 
-void criaVetor(XPTO* v, int n){
+void criaVetor(XPTO *v, int n){
 	int i;
-	for(i = 0; i < n; i++){
+	for(i=0;i<n;i++){
 		v[i].a = i%3;
 		v[i].b = 100 - i%5;
 	}
 }
 
-void imprimeVetor(XPTO* v, int n){
+void imprimeVetor(XPTO *v, int n){
 	int i;
-	for(i = 0; i < n; i++){
-		printf("a = %d, b = %d\n", v[i].a, v[i].b);
+	for(i=0;i<n;i++){
+		printf("a=%d_b=%d\n", v[i].a, v[i].b);
 	}
 }
 
-int porA(void* p1, void* p2){
-	XPTO* pp1 = p1;
-	XPTO* pp2 = p2;
+int porA(void *p1, void *p2){
+	XPTO *pp1 = p1;
+	XPTO *pp2 = p2;
 	return pp1->a < pp2->a;
 }
 
-int porB(void* p1, void* p2){
-	XPTO* pp1 = p1;
-	XPTO* pp2 = p2;
+int porB(void *p1, void *p2){
+	XPTO *pp1 = p1;
+	XPTO *pp2 = p2;
 	return pp1->b < pp2->b;
 }
 
-void merge(XPTO *v, int i, int m, int f){
-
-	int a = i;
-	int b = m;
-	int k = 0;
-
-	int *v2 = malloc(sizeof(int)* (f-i+1) );
-
-	while( a < m && b <= f){
-		if( v[a] < v[b]){
-			v2[k] = v[a];
-			a++;
-		}else{
-			v2[k] = v[b];
-			b++;
-		}
-		k++;
-	}
-
-	while( a < m ){
-		v2[k] = v[a];
-		a++;
-		k++;
-	}
-	while( b <= f ){
-		v2[k] = v[b];
-		b++;
-		k++;
-	}
-
-	copiaVetor(v+i, v2, f-i+1);
-
-	free(v2);
-
+void troca(void *a, void *b, size_t tam){
+	void* aux = malloc(tam);
+	memcpy(aux, a, tam);
+	memcpy(a, b, tam);
+	memcpy(b, aux, tam);
+	free(aux);
 }
 
-int main(int argc, char* argv[]){
+void ordena(void *v,size_t tam, int n, int (*porA)(void *a, void *b)){
+	int i,j;
+	for(i=0;i<n-1;i++){
+		for(j=0;j<n-1;j++){
+			if(porA(v + j*tam, v +(j+1)*tam)==1){
+				troca(v+ j*tam, v+(j+1)*tam, tam);
+		}
+	}
+}
+}
+
+
+
+int main(int argc, char*argv[]){
 	XPTO v[10];
 	criaVetor(v, 10);
+	ordena(v,sizeof(XPTO), 10, porA); //chamada da sua função, a ordenação será feita por A
 
-	merge(&v, sizeof(XPTO), 10, porA);
-
-	imprimeVetor(v, 10);
+	imprimeVetor(v,10);
 
 	return 0;
 }
